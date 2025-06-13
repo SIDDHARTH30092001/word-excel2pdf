@@ -93,7 +93,7 @@ def generate():
             if file.endswith(".pdf"):
                 zipf.write(os.path.join(session_dir, file), arcname=file)
 
-    return send_file(zip_path, as_attachment=True)
+    return send_file(zip_path, as_attachment=True, mimetype='application/zip')
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=False)
