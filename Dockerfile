@@ -1,22 +1,25 @@
-FROM python:3.10-slim
+FROM debian:bullseye-slim
 
-# Install LibreOffice and other needed packages
+# Install Python & LibreOffice
 RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
     libreoffice \
-    && apt-get clean
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
 
-# Copy all files
+# Copy project files
 COPY . /app
 
-# Install Python dependencies
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+# Install Python packages
+RUN pip3 install --upgrade pip
+RUN pip3 install -r requirements.txt
 
-# Expose port
+# Expose port for Render
 EXPOSE 5000
 
-# Start app with gunicorn
+# Start the Flask app using Gunicorn
 CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
